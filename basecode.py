@@ -12,41 +12,43 @@ def main():
         cv2.namedWindow(windowName)
 
         # capture1 = cv2.VideoCapture(0)  # laptop's camera
-        capture1 = cv2.VideoCapture("http://10.130.16.238:8080/video")   # sample code for mobile camera video capture using IP camera
+        capture1 = cv2.VideoCapture(
+            "http://10.130.16.238:8080/video"
+        )  # sample code for mobile camera video capture using IP camera
         capture2 = cv2.VideoCapture("http://10.130.132.243:8080/video")
         capture3 = cv2.VideoCapture("http://10.130.13.170:8080/video")
-# ---------------------------------------------------------------------------------------------------------------------------------------
+        # ---------------------------------------------------------------------------------------------------------------------------------------
         # define size for recorded video frame for video 1
         width1 = int(capture1.get(3))
         height1 = int(capture1.get(4))
         size1 = (width1, height1)
 
-
-        # for 2nd camera 
+        # for 2nd camera
         width2 = int(capture2.get(3))
-  
         height2 = int(capture2.get(4))
         size2 = (width2, height2)
 
-
         # for 3nd camera
-        
+
         width3 = int(capture3.get(3))
         height3 = int(capture3.get(4))
         size3 = (width3, height3)
-# --------------------------------------------------------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------------------------------------------------------
         # frame of size is being created and stored in .avi file
         optputFile1 = cv2.VideoWriter(
-            'Stream1Recording.avi', cv2.VideoWriter_fourcc(*'MJPG'), 10, size1)
-        
+            "Stream1Recording.avi", cv2.VideoWriter_fourcc(*"MJPG"), 10, size1
+        )
+
         # for 2nd camera
         optputFile2 = cv2.VideoWriter(
-            'Stream2Recording.avi', cv2.VideoWriter_fourcc(*'MJPG'), 10, size2)
+            "Stream2Recording.avi", cv2.VideoWriter_fourcc(*"MJPG"), 10, size2
+        )
 
         # for 3rd camera
         optputFile3 = cv2.VideoWriter(
-            'Stream3Recording.avi', cv2.VideoWriter_fourcc(*'MJPG'), 10, size3)
-# -------------------------------------------------------------------------------------------------------------------------------------
+            "Stream3Recording.avi", cv2.VideoWriter_fourcc(*"MJPG"), 10, size3
+        )
+        # -------------------------------------------------------------------------------------------------------------------------------------
         # check if feed exists or not for camera 1
         if capture1.isOpened():
             ret1, frame1 = capture1.read()
@@ -64,7 +66,7 @@ def main():
             ret3, frame3 = capture3.read()
         else:
             ret3 = False
-# ---------------------------------------------------------------------------------------------------------------------------------
+        # ---------------------------------------------------------------------------------------------------------------------------------
         while ret1:
             ret1, frame1 = capture1.read()
             ret2, frame2 = capture2.read()
@@ -79,23 +81,21 @@ def main():
             # escape key (27) to exit
             if cv2.waitKey(1) == 27:
                 break
-# ---------------------------------------------------------------------------------------------------------------------------------- 
+        # ----------------------------------------------------------------------------------------------------------------------------------
         capture1.release()
         optputFile1.release()
         # cv2.destroyAllWindows()
-
 
         # for 2nd camera
         capture2.release()
         optputFile2.release()
         # cv2.destroyAllWindows()
 
-
         # for 3nd camera
         capture3.release()
         optputFile3.release()
         cv2.destroyAllWindows()
-# ------------------------------------------------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------------------------------------------------
 
     elif option == 2:
         # live stream
@@ -109,8 +109,13 @@ def main():
         else:
             ret1 = False
 
-        while ret1:  # and ret2 and ret3:
+        while ret1:
             ret1, frame1 = capture1.read()
+
+            # TODO CALL YOLO AND FUNCTION TO ADD BOUNDING BOXES ON EACH FRAME. 
+            # TODO CALL cv2.imshow ON EACH NEW FRAME
+            # * This will make bounding boxes on video feed
+
             cv2.imshow(windowName1, frame1)
 
             if cv2.waitKey(1) == 27:
@@ -118,6 +123,9 @@ def main():
 
         capture1.release()
         cv2.destroyAllWindows()
+
+    elif option == 3:
+        pass
 
     else:
         print("Invalid option entered. Exiting...")
