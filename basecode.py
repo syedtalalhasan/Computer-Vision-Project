@@ -1,13 +1,26 @@
 import cv2
 import torch
 
+VIDEO1 = "videos\\Stream1Recording.avi"
+VIDEO2 = "videos\\Stream2Recording.avi"
+VIDEO3 = "videos\\Stream3Recording.avi"
+
 
 def main():
 
     model = torch.hub.load("ultralytics/yolov5", "custom", "best.pt")
     image = "images/img-a5.jpg"
 
-    print("Press 1 for pre-recorded videos, 2 for live stream: ")
+    # print("Press 1 for pre-recorded videos, 2 for live stream: ")
+
+    menu = """********************************************
+    Press 1: Record video
+    Press 2: Livestream from webcam
+    Press 3: Run on Recorded Video
+    ********************************************"""
+
+    print(menu)
+
     option = int(input())
 
     if option == 1:
@@ -33,7 +46,6 @@ def main():
         size2 = (width2, height2)
 
         # for 3nd camera
-        # adding another comment
 
         width3 = int(capture3.get(3))
         height3 = int(capture3.get(4))
@@ -117,10 +129,6 @@ def main():
         while ret1:
             ret1, frame1 = capture1.read()
 
-            # TODO CALL YOLO AND FUNCTION TO ADD BOUNDING BOXES ON EACH FRAME.
-            # TODO CALL cv2.imshow ON EACH NEW FRAME
-            # * This will make bounding boxes on video feed
-
             results = model(frame1)
             results.render()
             frame1 = results.imgs[0]
@@ -137,9 +145,7 @@ def main():
         windowName1 = "Pre-recorded video"
         cv2.namedWindow(windowName1)
 
-        capture1 = cv2.VideoCapture(
-            "E:\Fall_2021\CS436_CVF\Project\Videos\Stream1Recording.avi"
-        )
+        capture1 = cv2.VideoCapture(VIDEO3)
 
         if capture1.isOpened():  # check if feed exists or not for camera 1
             ret1, frame1 = capture1.read()
@@ -148,11 +154,6 @@ def main():
 
         while ret1:
             ret1, frame1 = capture1.read()
-
-            # TODO CALL YOLO AND FUNCTION TO ADD BOUNDING BOXES ON EACH FRAME.
-            # TODO CALL cv2.imshow ON EACH NEW FRAME
-            # * This will make bounding boxes on video feed
-
             results = model(frame1)
             results.render()
             frame1 = results.imgs[0]
