@@ -8,8 +8,10 @@ VIDEO3 = "videos\\Stream3Recording.avi"
 
 def main():
 
-    model = torch.hub.load("ultralytics/yolov5", "custom", "best.pt")
-    image = "images/img-a5.jpg"
+    model = torch.hub.load("ultralytics/yolov5", "custom", " best.pt")
+    # image = "images/img-a5.jpg"
+
+    torch.nn.Module.dump_patches = True
 
     # print("Press 1 for pre-recorded videos, 2 for live stream: ")
 
@@ -17,7 +19,7 @@ def main():
     Press 1: Record video
     Press 2: Livestream from webcam
     Press 3: Run on Recorded Video
-    ********************************************"""
+********************************************"""
 
     print(menu)
 
