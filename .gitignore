@@ -1,1 +1,7 @@
 .vscode/
+videos/
+test.py
+testing.py
+img.jpg
+__pycache__/
+basecode.py
