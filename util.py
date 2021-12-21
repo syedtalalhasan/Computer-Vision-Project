@@ -14,6 +14,8 @@ IP3 = "http://10.130.8.187:8080/video"
 MAX_DIST = 86
 MIN_DIST = 10
 
+TOP_VIEW = "homo-images/dst.jpg"
+
 HOMO_SIZE = (738, 409)
 
 A = np.array(
@@ -66,23 +68,37 @@ C2 = np.array(
 )
 
 
+# def menu():
+#     MENU = """********************************************
+#     Press 1: Record video
+#     Press 2: Livestream from webcam
+#     Press 3: Object Detection on Pre-Recorded Video
+#     Press 4: Object Detection on Live Stream
+#     Press 5: Top View Projection of Pre-Recorded Videos
+#     Press 6: Top View Projection of Live Videos
+#     Press 7: Top View Object Detection on Pre-Recorded Videos
+#              ...
+#     Press 9: SOP Violation on Pre-recorded Videos
+#              ...
+#     Press 11: Heat map 1 on Pre-recrded Videos
+#              ...
+#     Press 13: Heat map 1 on Pre-recrded Videos
+#              ...
+#     Press 15: Heat map 1 on Pre-recrded Videos
+# ********************************************"""
+#     print(MENU)
+#     return input("> ")
+
+
 def menu():
     MENU = """********************************************
-    Press 1: Record video
-    Press 2: Livestream from webcam
-    Press 3: Object Detection on Pre-Recorded Video
-    Press 4: Object Detection on Live Stream
-    Press 5: Top View Projection of Pre-Recorded Videos
-    Press 6: Top View Projection of Live Videos
-    Press 7: Top View Object Detection on Pre-Recorded Videos
-             ...
-    Press 9: SOP Violation on Pre-recorded Videos         
-             ...
-    Press 11: Heat map 1 on Pre-recrded Videos
-             ...
-    Press 13: Heat map 1 on Pre-recrded Videos
-             ...
-    Press 15: Heat map 1 on Pre-recrded Videos
+    Press 1: Object Detection
+    Press 2: Top View Projection
+    Press 3: Top View Object Detection
+    Press 4: SOP Violation Detection         
+    Press 5: Heat map
+    Press 6: Animated Heat map
+    Press 7: Animated Heat map for SOP Violation
 ********************************************"""
     print(MENU)
     return input("> ")

@@ -5,6 +5,7 @@ import util
 from video_reader import VideoReader, VideoShower
 import homography_computation
 import time
+import sys
 
 model = torch.hub.load(
     "ultralytics/yolov5",
@@ -14,105 +15,30 @@ model = torch.hub.load(
 )
 
 
-def main():
+def main(path_list, M_list, m_list, dst_shape):
+
     option = int(util.menu())
 
     if option == 1:
-        save_videos()
+        object_detection(path_list)
 
     elif option == 2:
-        # live stream
-        live_stream()
+        topview(path_list, M_list, dst_shape)
 
     elif option == 3:
-        object_detection(util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH)
+        topview_object_detection(path_list, M_list, m_list, dst_shape)
 
     elif option == 4:
-        # live_object_detection()
-        object_detection(util.IP1, util.IP2, util.IP3)
+        SOP_violation(path_list, M_list, m_list, dst_shape)
 
     elif option == 5:
-        topview(
-            [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH],
-            [util.A, util.B, util.C],
-            util.HOMO_SIZE,
-        )
+        heatmap1(path_list, M_list, m_list, dst_shape)
 
     elif option == 6:
-        dst = cv2.imread("img.jpg")
-
-        temp_stream = cv2.VideoCapture(util.IP1)
-        status, frame = temp_stream.read()
-
-        if not status:
-            print("error")
-            return
-        A = homography_computation.main(frame, dst)
-
-        temp_stream = cv2.VideoCapture(util.IP1)
-        status, frame = temp_stream.read()
-
-        if not status:
-            print("error")
-            return
-        B = homography_computation.main(frame, dst)
-
-        temp_stream = cv2.VideoCapture(util.IP1)
-        status, frame = temp_stream.read()
-
-        if not status:
-            print("error")
-            return
-        C = homography_computation.main(frame, dst)
-
-        topview(
-            [util.IP1, util.IP2, util.IP3],
-            [A, B, C],  # temporarily placed here
-            (int(dst.shape[1]), int(dst.shape[0])),
-        )
+        heatmap2(path_list, M_list, m_list, dst_shape)
 
     elif option == 7:
-        topview_object_detection(
-            [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH],
-            [util.A, util.B, util.C],
-            [util.A2, util.B2, util.C2],
-            util.HOMO_SIZE,
-        )
-
-    elif option == 8:
-        pass
-
-    elif option == 9:
-        SOP_violation(
-            [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH],
-            [util.A, util.B, util.C],
-            [util.A2, util.B2, util.C2],
-            util.HOMO_SIZE,
-        )
-
-    elif option == 11:
-        heatmap1(
-            [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH],
-            [util.A, util.B, util.C],
-            [util.A2, util.B2, util.C2],
-            util.HOMO_SIZE,
-        )
-
-    elif option == 13:
-        heatmap2(
-            [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH],
-            [util.A, util.B, util.C],
-            [util.A2, util.B2, util.C2],
-            util.HOMO_SIZE,
-        )
-
-    elif option == 15:
-        heatmap3(
-            [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH],
-            [util.A, util.B, util.C],
-            [util.A2, util.B2, util.C2],
-            util.HOMO_SIZE,
-        )
+        heatmap3(path_list, M_list, m_list, dst_shape)
 
     else:
         print("why am I here? ")
@@ -282,10 +208,10 @@ def live_object_detection():
         # shower3.frame = frame3
 
 
-def object_detection(vid1, vid2, vid3):
-    reader1 = VideoReader(vid1).start()
-    reader2 = VideoReader(vid2).start()
-    reader3 = VideoReader(vid3).start()
+def object_detection(path_list):
+    reader1 = VideoReader(path_list[0]).start()
+    reader2 = VideoReader(path_list[1]).start()
+    reader3 = VideoReader(path_list[2]).start()
 
     shower1 = VideoShower("Video1").start()
     shower2 = VideoShower("Video2").start()
@@ -927,4 +853,58 @@ def heatmap3(vids, M_list, m_list, dst_shape):
             shower.q.put(heatmap)
 
 
-main()
+def homography_generator(path_list, dst_path):
+    dst = cv2.imread(dst_path)
+    M_list = []
+    temp_stream = cv2.VideoCapture(path_list[0])
+    status, frame = temp_stream.read()
+    temp_stream.release()
+    if not status:
+        print("error")
+        return None
+    M_list.append(homography_computation.main(frame, dst))
+
+    temp_stream = cv2.VideoCapture(path_list[1])
+    status, frame = temp_stream.read()
+    temp_stream.release()
+
+    if not status:
+        print("error")
+        return None
+    M_list.append(homography_computation.main(frame, dst))
+
+    temp_stream = cv2.VideoCapture(path_list[2])
+    status, frame = temp_stream.read()
+    temp_stream.release()
+
+    if not status:
+        print("error")
+        return None
+    M_list.append(homography_computation.main(frame, dst))
+
+    return M_list, dst.shape[:2]
+
+
+if __name__ == "__main__":
+
+    if len(sys.argv) == 1:
+        argument = "pre"
+    else:
+        argument = sys.argv[1]
+
+    if argument == "pre":
+        path_list = [util.VIDEO1_PATH, util.VIDEO2_PATH, util.VIDEO3_PATH]
+        M_list = [util.A, util.B, util.C]
+        m_list = [util.A2, util.B2, util.C2]
+        main(path_list, M_list, m_list, util.HOMO_SIZE)
+    elif argument == "save":
+        save_videos()
+    elif argument == "stream":
+        live_stream()
+    elif argument == "live":
+        path_list = [util.IP1, util.IP2, util.IP3]
+        # path_list = [0, 0, 0]
+        M_list, dst_shape = homography_generator(path_list, util.TOP_VIEW)
+        main(path_list, M_list, M_list, dst_shape)
+    else:
+        print("Error: Invalid Argument")
