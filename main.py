@@ -6,12 +6,14 @@ from video_reader import VideoReader, VideoShower
 import homography_computation
 import time
 import sys
+from matplotlib import pyplot as plt
+
 
 model = torch.hub.load(
     "ultralytics/yolov5",
     "custom",
     "weights.pt",
-    # force_reload=True,  # uncomment out when changing weights
+    force_reload=True,  # uncomment out when changing weights
 )
 
 
@@ -303,6 +305,7 @@ def topview(vids, M_list, dst_shape):
 
 
 def topview_object_detection(vids, M_list, m_list, dst_shape):
+    
     reader1 = VideoReader(vids[0]).start()
     reader2 = VideoReader(vids[1]).start()
     reader3 = VideoReader(vids[2]).start()
@@ -327,6 +330,18 @@ def topview_object_detection(vids, M_list, m_list, dst_shape):
         results1 = model(reader1.frame)
         results2 = model(reader2.frame)
         results3 = model(reader3.frame)
+        
+        if save_counter < 500:
+            try:
+            
+                cv2.imwrite(f'E:\\D drive\\Fall 2021\\Computer visions\\project\\github version\\masked_images2\\img_{save_counter}.jpg',results1.render()[0])
+                cv2.imwrite(f'E:\\D drive\\Fall 2021\\Computer visions\\project\\github version\\masked_images2\\img_{save_counter+1}.jpg',results2.render()[0])
+                cv2.imwrite(f'E:\\D drive\\Fall 2021\\Computer visions\\project\\github version\\masked_images2\\img_{save_counter+2}.jpg',results3.render()[0])
+                
+                save_counter+=3
+            except:
+                continue
+
 
         labels1, cord_thres1 = (
             results1.xyxyn[0][:, -1].cpu().numpy(),

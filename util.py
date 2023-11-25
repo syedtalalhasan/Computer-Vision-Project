@@ -1,9 +1,9 @@
 import numpy as np
 
 
-VIDEO1_PATH = "videos\\Stream1Recording.avi"
-VIDEO2_PATH = "videos\\Stream2Recording.avi"
-VIDEO3_PATH = "videos\\Stream3Recording.avi"
+VIDEO1_PATH = "vids new\\Stream1Recording.avi"
+VIDEO2_PATH = "vids new\\Stream2Recording.avi"
+VIDEO3_PATH = "vids new\\Stream3Recording.avi"
 
 IP1 = "http://10.130.8.187:8080/video"
 IP2 = "http://10.130.8.187:8080/video"

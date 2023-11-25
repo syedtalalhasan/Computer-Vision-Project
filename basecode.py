@@ -110,7 +110,7 @@ def main():
     model = torch.hub.load(
         "ultralytics/yolov5",
         "custom",
-        "D:\\Fall2021\\Computer visions\\project\\best.pt",
+        "D:\\Fall2021\\Computer visions\\project\\github version\\Computer-Vision-Project\\best.pt",
     )
 
     # print("Press 1 for pre-recorded videos, 2 for live stream: ")
@@ -394,14 +394,15 @@ def main():
         capture2 = cv2.VideoCapture(VIDEO2)
         capture3 = cv2.VideoCapture(VIDEO3)
 
-        if capture1.isOpened():  # check if feed exists or not for camera 1
-            ret1, frame1 = capture1.read()
-        else:
-            ret1 = False
+        # if capture1.isOpened():  # check if feed exists or not for camera 1
+        #     ret1, frame1 = capture1.read()
+        # else:
+        #     ret1 = False
         count = 0
         while ret1:
             result1 = model(frame1)
-
+            
+            ret1, frame1 = capture1.read()
             ret2, frame2 = capture2.read()
             result2 = model(frame2)
             ret3, frame3 = capture3.read()
@@ -502,14 +503,14 @@ def main():
             "LiveHomographicRecording.avi", cv2.VideoWriter_fourcc(*"MJPG"), 10, size1
         )
 
-        if capture1.isOpened():  # check if feed exists or not for camera 1
-            ret1, frame1 = capture1.read()
-        else:
-            ret1 = False
+        # if capture1.isOpened():  # check if feed exists or not for camera 1
+        #     ret1, frame1 = capture1.read()
+        # else:
+        #     ret1 = False
         count = 0
         while ret1:
             result1 = model(frame1)
-
+            ret1, frame1 = capture1.read()
             ret2, frame2 = capture2.read()
             result2 = model(frame2)
             ret3, frame3 = capture3.read()
