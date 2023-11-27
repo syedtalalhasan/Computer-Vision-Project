@@ -16,6 +16,8 @@ Sample images from our model predictions are shown below:
 
 ![](img4.jpeg)
 
-![](img5.jpeg)The center coordinates of the bounding box are then projected on the top view to create an animated violation hotspot heatmap. A frame from the heatmap is displayed below 
+![](img5.jpeg)
+
+The center coordinates of the bounding box are then projected on the top view to create an animated violation hotspot heatmap. A frame from the heatmap is displayed below 
 
 ![](img6.jpeg)
